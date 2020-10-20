@@ -3,13 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Intent Test</title>
+  <title>Camel X3</title>
+
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#202124">
+  <link rel="icon" type="image/png" href="assets/icon-512.png" />
+
+  <link rel="stylesheet" type="text/css" href="src/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/toastify-js@1.6.1/src/toastify.min.css" rel="stylesheet">
 </head>
 <body>
-<div>
-Try opening these intents:
-<div><a href="intent://kirilv.com/canvas-confetti/#Intent;scheme=https;package=org.mozilla.focus;end;">Open in Firefox Focus</a></div>
-<div><a href="intent://kirilv.com/canvas-confetti/#Intent;scheme=https;package=com.android.chrome;end;">Open in Chrome</a></div>
-</div>
+  <div id="unsupported" class="unsupported limit">
+    <p>This browser is not supported.</p>
+    <p>See the <a href="https://github.com/catdad-experiments/reminder">GitHub page</a> for more info.</p>
+  </div>
+
+  <div id="main" class="main limit hide"></div>
+
+  <script type="module">
+    document.querySelector('#unsupported').remove();
+    document.querySelector('#main').classList.remove('hide');
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.6.1/src/toastify.min.js"></script>
+  <script type="module" async>
+    import loader from './src/loader.js';
+
+    loader();
+  </script>
+  <script async src="/analytics.js"></script>
 </body>
 </html>

@@ -1,0 +1,130 @@
+:root {
+  --full: calc(var(--vh, 1vh) * 100);
+  --limit: 600px;
+  --spacing: 1em;
+  --opacity-recolor: 0.6;
+  --create-space: 4.6rem;
+
+  --darkest: #202124;
+  --dark: #27292b;
+  --middle: #777777;
+  --light: #e5e5e5;
+  --lightest: #f0f0f0;
+  --accent: #e2a316;
+  --accent-contract: var(--darkest);
+
+  --DARK-lvl2: var(--dark);
+  --DARK-background: var(--darkest);
+  --DARK-foreground: var(--light);
+
+  --LIGHT-lvl2: var(--lightest);
+  --LIGHT-foreground: var(--darkest);
+  --LIGHT-background: var(--light);
+}
+
+body {
+  --lvl2: var(--DARK-lvl2);
+  --background: var(--DARK-background);
+  --foreground: var(--DARK-foreground);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+
+  font-family: sans-serif;
+  color: var(--foreground);
+  line-height: 1.2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.unsupported {
+  text-align: center;
+}
+.unsupported a {
+  color: white;
+  font-weight: bold;
+}
+
+.header-container.error {
+  font-weight: bold;
+  background: #d64c4f;
+}
+
+.container {
+  position: relative;
+  height: var(--full);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.contents {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.limit {
+  width: 100%;
+  max-width: var(--limit);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hide {
+  display: none !important;
+}
+
+.invisible {
+  opacity: 0;
+}
+
+.stealthy {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+a {
+  color: #6daddd;
+}
+
+/** STUFF ABOVE IS STANDARD FRAMEWORK **/
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  position: relative;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: calc(var(--spacing));
+}
+
+i.material-icons {
+  user-select: none;
+  padding: 0 0 0 10px;
+}
+
+/* TOAST STYLE */
+
+.toastify.toastify.toastify {
+  width: calc(100% - 20px);
+  max-width: var(--limit);
+  text-align: center;
+}
