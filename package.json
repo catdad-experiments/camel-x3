@@ -1,0 +1,25 @@
+{
+  "name": "camel-x3",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "serve -l 8003",
+    "ssh-tunnel": "ssh -R 80:localhost:8003 ssh.localhost.run",
+    "dev": "multispawn npm start ! npm run -s ssh-tunnel"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/catdad-experiments/camel-x3.git"
+  },
+  "keywords": [],
+  "author": "Kiril Vatev <vatev.1@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/catdad-experiments/camel-x3/issues"
+  },
+  "homepage": "https://github.com/catdad-experiments/camel-x3#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "serve": "^11.3.2"
+  }
+}
