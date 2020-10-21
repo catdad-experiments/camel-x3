@@ -73,12 +73,6 @@ export default () => {
     });
 
     events.resume();
-
-    //events.emit('receive-share', {
-    //  title: 1,
-    //  text: 2,
-    //  url: 3
-    //});
   }).catch(function catchErr(err) {
     events.emit('error', err);
     onError(err);
