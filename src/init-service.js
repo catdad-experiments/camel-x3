@@ -4,7 +4,7 @@ const log = (first, ...args) => {
   console.log(`${PARENT} ${first}`, ...args);
 };
 
-export default ({ events }) => {
+export default () => {
   window.addEventListener('beforeinstallprompt', () => {
     log('we can install the app now');
   //  events.emit('can-install', { prompt: ev });
@@ -26,17 +26,6 @@ export default ({ events }) => {
 
       if (data.action === 'log') {
         return void log('worker - ', ...data.args);
-      }
-
-      if (data.action === 'receive-share') {
-        const { title, text, url, file } = data;
-        events.emit('receive-share', { title, text, url, file });
-        return;
-      }
-
-      if (data.action === 'notification-click') {
-        events.emit('render-focus', { id: data.id });
-        return;
       }
 
       log('unknown message - ', ev.data);

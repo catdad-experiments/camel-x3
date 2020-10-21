@@ -12,35 +12,45 @@ const getCamelUrl = productUrl => {
   return `camelcamelcamel.com/search?sq=${encodeURIComponent(productUrl)}`;
 };
 
-export default ({ events }) => {
-  const elem = document.querySelector('#main');
+const query = (function parseQuery(){
+  const query = {};
+  const temp = window.location.search.substring(1).split('&');
+  for (const i in temp) {
+    const q = temp[i].split('=');
+    query[q.shift()] = decodeURIComponent(q.join('='));
+  }
+  return query;
+})();
+
+const renderShareUi = ({ title, text, url }) => {
   const regex = /(https?:\/\/(?:[^.]+\.)?amazon\.[^ ]+)/;
+  const [, textUrl] = text.match(regex) || [];
+  const camelUrl = getCamelUrl(url || textUrl);
 
-  const splash = ({ title, text, url }) => {
-    const [, textUrl] = text.match(regex) || [];
-    const camelUrl = getCamelUrl(url || textUrl);
+  const stuff = html`<div class=limit>
+    <div>this site: ${window.location.href}</div>
+    <div>-------------</div>
+    <div>title: ${title}</div>
+    <div>text: ${text}</div>
+    <div>url: ${url}</div>
+    <div>camel url: ${camelUrl}</div>
+    <div>
+      <div><a href="intent://${camelUrl}#Intent;scheme=https;package=org.mozilla.focus;end;">Open in Firefox Focus</a></div>
+      <div><a href="intent://${camelUrl}#Intent;scheme=https;package=com.android.chrome;end;">Open in Chrome</a></div>
+    </div>
+  </div>`;
 
-    const stuff = html`<div class=limit>
-      <div>title: ${title}</div>
-      <div>text: ${text}</div>
-      <div>url: ${url}</div>
-      <div>camel url: ${camelUrl}</div>
-      <div>
-        <div><a href="intent://${camelUrl}#Intent;scheme=https;package=org.mozilla.focus;end;">Open in Firefox Focus</a></div>
-        <div><a href="intent://${camelUrl}#Intent;scheme=https;package=com.android.chrome;end;">Open in Chrome</a></div>
-      </div>
-    </div>`;
+  return stuff;
+};
 
-    render(stuff, elem);
-  };
+export default () => {
+  const elem = document.querySelector('#main');
 
-  const onShare = async ({ title, text, url }) => {
-    splash({ title, text, url });
-  };
+  const ui = query.title && query.text ?
+    renderShareUi(query) :
+    html`<div>Nothing was shared</div>`;
 
-  events.on('receive-share', onShare);
+  render(ui, elem);
 
-  return () => {
-    events.off('receive-share', onShare);
-  };
+  return () => {};
 };
