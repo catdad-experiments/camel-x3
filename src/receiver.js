@@ -12,7 +12,17 @@ const getCamelUrl = productUrl => {
   return `camelcamelcamel.com/search?sq=${encodeURIComponent(productUrl)}`;
 };
 
-export default ({ events }) => {
+const query = (function parseQuery(){
+  const query = {};
+  const temp = window.location.search.substring(1).split('&');
+  for (const i in temp) {
+    const q = temp[i].split('=');
+    query[q.shift()] = decodeURIComponent(q.join('='));
+  }
+  return query;
+})();
+
+export default () => {
   const elem = document.querySelector('#main');
   const regex = /(https?:\/\/(?:[^.]+\.)?amazon\.[^ ]+)/;
 
@@ -36,13 +46,7 @@ export default ({ events }) => {
     render(stuff, elem);
   };
 
-  const onShare = async ({ title, text, url }) => {
-    splash({ title, text, url });
-  };
+  splash(query);
 
-  events.on('receive-share', onShare);
-
-  return () => {
-    events.off('receive-share', onShare);
-  };
+  return () => {};
 };
