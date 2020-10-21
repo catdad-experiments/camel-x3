@@ -21,6 +21,8 @@ export default ({ events }) => {
     const camelUrl = getCamelUrl(url || textUrl);
 
     const stuff = html`<div class=limit>
+      <div>this site: ${window.location.href}</div>
+      <div>-------------</div>
       <div>title: ${title}</div>
       <div>text: ${text}</div>
       <div>url: ${url}</div>
