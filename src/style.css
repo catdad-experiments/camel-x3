@@ -131,6 +131,8 @@ i.material-icons {
 
 /* APP STUFF */
 .main h2 {
+  font-size: 1.2rem;
+  line-height: 1.4;
   max-width: calc(100% - 2rem);
 }
 
