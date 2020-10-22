@@ -128,3 +128,28 @@ i.material-icons {
   max-width: var(--limit);
   text-align: center;
 }
+
+/* APP STUFF */
+.links {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+}
+
+.links a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 2rem;
+  text-decoration: none;
+  color: var(--foreground);
+}
+
+.links a svg {
+  --size: 42px;
+  fill: var(--foreground);
+  width: var(--size);
+  height: var(--size);
+  margin: calc(var(--size) / 3) 0;
+
+}
