@@ -31,7 +31,7 @@ const query = (function parseQuery(){
   const temp = window.location.search.substring(1).split('&');
   for (const i in temp) {
     const q = temp[i].split('=');
-    query[q.shift()] = decodeURIComponent(q.join('='));
+    query[q.shift()] = decodeURIComponent(q.join('=')).replace(/\+/g, ' ');
   }
   return query;
 })();
