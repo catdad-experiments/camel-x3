@@ -130,6 +130,10 @@ i.material-icons {
 }
 
 /* APP STUFF */
+.main h2 {
+  max-width: calc(100% - 2rem);
+}
+
 .links {
   display: flex;
   flex-direction: row;
