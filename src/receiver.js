@@ -31,7 +31,7 @@ const query = (function parseQuery(){
   const temp = window.location.search.substring(1).split('&');
   for (const i in temp) {
     const q = temp[i].split('=');
-    query[q.shift()] = decodeURIComponent(q.join('='));
+    query[q.shift()] = decodeURIComponent(q.join('=')).replace(/\+/g, ' ');
   }
   return query;
 })();
@@ -44,8 +44,8 @@ const renderShareUi = ({ text, url }) => {
   const bodyText = text.replace(textUrl, '').trim();
 
   const stuff = html`
-    <h2>${bodyText}</h2>
-    <div>Open price tracker in:</div>
+    <h1>${bodyText}</h1>
+    <h2>Open price tracker in:</h2>
     <div class=links>
       <a href="intent://${camelUrl}#Intent;scheme=https;package=com.android.chrome;end;">
         <${Chrome} />

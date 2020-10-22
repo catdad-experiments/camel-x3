@@ -130,6 +130,19 @@ i.material-icons {
 }
 
 /* APP STUFF */
+.main h1 {
+  font-size: 1.3rem;
+  line-height: 1.4;
+  max-width: calc(100% - 2rem);
+  font-weight: normal;
+}
+
+.main h2 {
+  font-size: 1.1rem;
+  line-height: 1.2;
+  font-weight: normal;
+}
+
 .links {
   display: flex;
   flex-direction: row;
