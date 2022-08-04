@@ -29,7 +29,7 @@ const query = (function parseQuery(){
 })();
 
 const renderShareUi = ({ text, url }) => {
-  const regex = /(https?:\/\/(?:[^.]+\.)?amazon\.[^ ]+)/;
+  const regex = /(https?:\/\/[^ ]+)/;
   const [, textUrl] = text.match(regex) || [];
   const camelUrl = getCamelUrl(url || textUrl);
 
