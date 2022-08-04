@@ -1,13 +1,5 @@
 import { html, render } from './preact.js';
 
-/*
-<div>
-  Try opening these intents:
-  <div><a href="intent://kirilv.com/canvas-confetti/#Intent;scheme=https;package=org.mozilla.focus;end;">Open in Firefox Focus</a></div>
-  <div><a href="intent://kirilv.com/canvas-confetti/#Intent;scheme=https;package=com.android.chrome;end;">Open in Chrome</a></div>
-</div>
-*/
-
 // https://materialdesignicons.com/icon/google-chrome
 const Chrome = () => html`
 <svg viewBox="0 0 24 24">
@@ -37,7 +29,7 @@ const query = (function parseQuery(){
 })();
 
 const renderShareUi = ({ text, url }) => {
-  const regex = /(https?:\/\/(?:[^.]+\.)?amazon\.[^ ]+)/;
+  const regex = /(https?:\/\/[^ ]+)/;
   const [, textUrl] = text.match(regex) || [];
   const camelUrl = getCamelUrl(url || textUrl);
 
