@@ -53,12 +53,21 @@ const renderShareUi = ({ text, url }) => {
   return stuff;
 };
 
+const getSampleShare = () => ({
+  title: 'Check out this cool share',
+  text: 'This is a description that ends in a URL because that is how Amazon shares https://kirilvatev.com'
+});
+
+const isLocalhost = () => !!/^localhost:[0-9]+$/.test(location.host);
+
 export default () => {
   const elem = document.querySelector('#main');
 
   const ui = query.title && query.text ?
     renderShareUi(query) :
-    html`<div>Nothing was shared</div>`;
+    isLocalhost() ?
+      renderShareUi(getSampleShare()) :
+      html`<div>Nothing was shared</div>`;
 
   render(ui, elem);
 
