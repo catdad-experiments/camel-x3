@@ -50,7 +50,7 @@ export default () => {
 
   // load all the modules from the server directly
   Promise.all([
-    load('./receiver.js')
+    load('./renderer.js')
   ]).then(async ([
     ...modules
   ]) => {
