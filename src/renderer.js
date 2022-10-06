@@ -1,4 +1,4 @@
-import { html, render } from './preact.js';
+import { html, render, useState } from './preact.js';
 
 // https://materialdesignicons.com/icon/google-chrome
 const Chrome = () => html`
@@ -28,14 +28,16 @@ const query = (function parseQuery(){
   return query;
 })();
 
-const renderShareUi = ({ text, url }) => {
+const UI = ({ text, url, ...rest }) => {
+  const [showDebug, setDebug] = useState(false);
+
   const regex = /(https?:\/\/[^ ]+)/;
   const [, textUrl] = text.match(regex) || [];
   const camelUrl = getCamelUrl(url || textUrl);
 
   const bodyText = text.replace(textUrl, '').trim();
 
-  const stuff = html`
+  return html`
     <h1>${bodyText}</h1>
     <h2>Open price tracker in:</h2>
     <div class=links>
@@ -48,17 +50,34 @@ const renderShareUi = ({ text, url }) => {
         <span>Firefox Focus</span>
       </a>
     </div>
+    <button onClick=${() => setDebug(!showDebug)} style="opacity: ${showDebug ? '1' : '0.6'}">Debug</button>
+    <div class=debug style="display: ${showDebug ? 'block' : 'none'}">
+      <table>
+        ${Object.entries({ ...rest, text, url, camelUrl }).map(([key, value]) => html`<tr><td>${key}</td><td>${value}</td></tr>`)}
+      </table>
+    </div>
   `;
-
-  return stuff;
 };
+
+const renderShareUi = (props) => {
+  return html`<${UI} ...${props} />`
+};
+
+const getSampleShare = () => ({
+  title: 'Check out this cool share',
+  text: 'This is a description that ends in a URL because that is how Amazon shares https://kirilvatev.com'
+});
+
+const isLocalhost = () => !!/^localhost:[0-9]+$/.test(location.host);
 
 export default () => {
   const elem = document.querySelector('#main');
 
   const ui = query.title && query.text ?
     renderShareUi(query) :
-    html`<div>Nothing was shared</div>`;
+    isLocalhost() ?
+      renderShareUi(getSampleShare()) :
+      html`<div>Nothing was shared</div>`;
 
   render(ui, elem);
 
