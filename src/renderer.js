@@ -1,4 +1,4 @@
-import { html, render, useState } from './preact.js';
+import { html, render, useState, useEffect, useRef } from './preact.js';
 
 // https://materialdesignicons.com/icon/google-chrome
 const Chrome = () => html`
@@ -18,6 +18,19 @@ const getCamelUrl = productUrl => {
   return `camelcamelcamel.com/search?sq=${encodeURIComponent(productUrl)}`;
 };
 
+const getLandingImage = async url => {
+  const res = await fetch(`https://proxy.cors.sh/${url}`);
+
+  if (!res.ok) {
+    return null;
+  }
+
+  const text = await res.text();
+  const [, landingImage] = text.match(/"landingImageUrl":"([^"]+)"/) || [];
+
+  return landingImage || null;
+};
+
 const query = (function parseQuery(){
   const query = {};
   const temp = window.location.search.substring(1).split('&');
@@ -30,15 +43,36 @@ const query = (function parseQuery(){
 
 const UI = ({ text, url, ...rest }) => {
   const [showDebug, setDebug] = useState(false);
+  const [landingImage, setLandingImage] = useState(null);
+  const previewRef = useRef(null);
 
   const regex = /(https?:\/\/[^ ]+)/;
   const [, textUrl] = text.match(regex) || [];
   const camelUrl = getCamelUrl(url || textUrl);
 
+  useEffect(() => {
+    getLandingImage(url || textUrl).then(result => {
+      if (result) {
+        setLandingImage(result);
+      }
+    }).catch(err => {
+      console.error('failed to get preview image', err);
+    });
+  }, [url, textUrl]);
+
+  useEffect(() => {
+    if (previewRef.current && landingImage) {
+      previewRef.current.style.setProperty(`--preview-image-url`, `url('${landingImage}')`);
+    }
+  }, [previewRef, landingImage]);
+
   const bodyText = text.replace(textUrl, '').trim();
 
   return html`
-    <h1>${bodyText}</h1>
+    <div class=side-by-side>
+      <div class=preview ref=${previewRef} />
+      <div class=body>${bodyText}</div>
+    </div>
     <h2>Open price tracker in:</h2>
     <div class=links>
       <a href="intent://${camelUrl}#Intent;scheme=https;package=com.android.chrome;end;">
@@ -65,7 +99,7 @@ const renderShareUi = (props) => {
 
 const getSampleShare = () => ({
   title: 'Check out this cool share',
-  text: 'This is a description that ends in a URL because that is how Amazon shares https://kirilvatev.com'
+  text: 'This is a description that ends in a URL because that is how Amazon shares https://a.co/2t5xJnL'
 });
 
 const isLocalhost = () => !!/^localhost:[0-9]+$/.test(location.host);
