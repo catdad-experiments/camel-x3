@@ -225,6 +225,10 @@ button {
   text-align: center;
 }
 
+.debug table tr td:last-of-type {
+  overflow-wrap: break-word;
+}
+
 .debug table tr:nth-child(odd) {
   background: var(--lvl2);
 }

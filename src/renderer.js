@@ -87,7 +87,13 @@ const UI = ({ text, url, ...rest }) => {
     <button onClick=${() => setDebug(!showDebug)} style="opacity: ${showDebug ? '1' : '0.6'}">Debug</button>
     <div class=debug style="display: ${showDebug ? 'block' : 'none'}">
       <table>
-        ${Object.entries({ ...rest, text, url, camelUrl }).map(([key, value]) => html`<tr><td>${key}</td><td>${value}</td></tr>`)}
+        ${Object.entries({
+          ...rest,
+          text,
+          url,
+          camelUrl,
+          image: landingImage
+        }).map(([key, value]) => html`<tr><td>${key}</td><td>${value}</td></tr>`)}
       </table>
     </div>
   `;
