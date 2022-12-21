@@ -1,4 +1,5 @@
 import { html, render, useState, useEffect, useRef } from './preact.js';
+import { getUrl } from './proxies.js';
 
 // https://thenounproject.com/icon/chrome-browser-2627873/
 const Chrome = () => html`
@@ -19,12 +20,7 @@ const getCamelUrl = productUrl => {
 };
 
 const getLandingImage = async url => {
-  const res = await fetch(`https://proxy.cors.sh/${url}`);
-
-  if (!res.ok) {
-    return null;
-  }
-
+  const res = await getUrl(url);
   const text = await res.text();
   const [, landingImage] = text.match(/"landingImageUrl":"([^"]+)"/) || [];
 
