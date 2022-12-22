@@ -14,7 +14,7 @@ const cloudFlareWorker = async url => await fetchOk(`https://test.cors.workers.d
 const corsAnywhere = async url => await fetchOk(`https://cors-anywhere.herokuapp.com/${url}`);
 
 export const getUrl = async url => {
-  for (const proxy of [corsAnywhere, cloudFlareWorker, corsSh, thingProxy]) {
+  for (const proxy of [corsSh, thingProxy, corsAnywhere, cloudFlareWorker]) {
     try {
       return await proxy(url);
     } catch (e) {}
