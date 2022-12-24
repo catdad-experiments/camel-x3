@@ -1,5 +1,5 @@
 import { html, render, useState, useEffect, useRef } from './preact.js';
-import { getUrl } from './proxies.js';
+import { proxies } from './proxies.js';
 
 // https://thenounproject.com/icon/chrome-browser-2627873/
 const Chrome = () => html`
@@ -20,11 +20,25 @@ const getCamelUrl = productUrl => {
 };
 
 const getLandingImage = async url => {
-  const res = await getUrl(url);
-  const text = await res.text();
-  const [, landingImage] = text.match(/"landingImageUrl":"([^"]+)"/) || [];
+  let landingImage, err;
 
-  return landingImage || null;
+  for (const proxy of proxies) {
+    try {
+      const res = await proxy(url);
+      const text = await res.text();
+      [, landingImage] = text.match(/"landingImageUrl":"([^"]+)"/) || [];
+
+      break;
+    } catch (e) {
+      err = e;
+    }
+  }
+
+  if (landingImage) {
+    return landingImage;
+  }
+
+  throw err || new Error('failed to fetch the landing image.... somehow?');
 };
 
 const query = (function parseQuery(){
@@ -39,7 +53,7 @@ const query = (function parseQuery(){
 
 const UI = ({ text, url, ...rest }) => {
   const [showDebug, setDebug] = useState(false);
-  const [landingImage, setLandingImage] = useState(null);
+  const [landingImage, setLandingImage] = useState([]);
   const previewRef = useRef(null);
 
   const regex = /(https?:\/\/[^ ]+)/;
@@ -48,17 +62,21 @@ const UI = ({ text, url, ...rest }) => {
 
   useEffect(() => {
     getLandingImage(url || textUrl).then(result => {
-      if (result) {
-        setLandingImage(result);
-      }
+      setLandingImage([null, result]);
     }).catch(err => {
-      console.error('failed to get preview image', err);
+      setLandingImage([err]);
     });
   }, [url, textUrl]);
 
   useEffect(() => {
-    if (previewRef.current && landingImage) {
-      previewRef.current.style.setProperty(`--preview-image-url`, `url('${landingImage}')`);
+    if (!previewRef.current) {
+      return;
+    }
+
+    const [, image] = landingImage;
+
+    if (image) {
+      previewRef.current.style.setProperty('--preview-image-url', `url('${image}')`);
     }
   }, [previewRef, landingImage]);
 
@@ -88,7 +106,8 @@ const UI = ({ text, url, ...rest }) => {
           text,
           url,
           camelUrl,
-          image: landingImage
+          imageErr: landingImage[0] ? landingImage[0].message : null,
+          imageUrl: landingImage[1]
         }).map(([key, value]) => html`<tr><td>${key}</td><td>${value}</td></tr>`)}
       </table>
     </div>

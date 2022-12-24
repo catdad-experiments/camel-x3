@@ -1,8 +1,14 @@
 const fetchOk = async (url, ...opts) => {
-  const res = await fetch(url, ...opts);
+  let res;
+
+  try {
+    res = await fetch(url, ...opts);
+  } catch (e) {
+    throw new Error(`failed to fetch "${url}" with error: ${e.message}`);
+  }
 
   if (!res.ok) {
-    throw new Error(`failed to fetch "${url}" with error: ${res.status} ${res.statusText}`);
+    throw new Error(`failed to fetch "${url}" with status: ${res.status} ${res.statusText}`);
   }
 
   return res;
@@ -13,12 +19,4 @@ const thingProxy = async url => await fetchOk(`https://thingproxy.freeboard.io/f
 const cloudFlareWorker = async url => await fetchOk(`https://test.cors.workers.dev/?${url}`);
 const corsAnywhere = async url => await fetchOk(`https://cors-anywhere.herokuapp.com/${url}`);
 
-export const getUrl = async url => {
-  for (const proxy of [corsSh, thingProxy, corsAnywhere, cloudFlareWorker]) {
-    try {
-      return await proxy(url);
-    } catch (e) {}
-  }
-
-  throw new Error('all proxies failed to get a successful response');
-};
+export const proxies = [corsSh, thingProxy, corsAnywhere, cloudFlareWorker];
