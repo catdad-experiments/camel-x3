@@ -2,7 +2,7 @@ const fetchOk = async (url, ...opts) => {
   const res = await fetch(url, ...opts);
 
   if (!res.ok) {
-    throw new Error(`failed to load with error: ${res.status}`);
+    throw new Error(`failed to fetch "${url}" with error: ${res.status} ${res.statusText}`);
   }
 
   return res;
