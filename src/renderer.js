@@ -128,7 +128,7 @@ const isLocalhost = () => !!/^localhost:[0-9]+$/.test(location.host);
 export default () => {
   const elem = document.querySelector('#main');
 
-  const ui = query.title && query.text ?
+  const ui = query.text ?
     renderShareUi(query) :
     isLocalhost() ?
       renderShareUi(getSampleShare()) :
